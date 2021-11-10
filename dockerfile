@@ -73,6 +73,12 @@ RUN a2enmod rewrite
 #RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# set the php.ini
+RUN mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini && \
+    sed -i "s@short_open_tag = Off@short_open_tag = On@g" /usr/local/etc/php/php.ini && \
+    sed -i "s@memory_limit = 128M@memory_limit = 512M@g" /usr/local/etc/php/php.ini
+
+
 # Clean up the image
 RUN rm -rf /var/lib/apt/lists/*
 
