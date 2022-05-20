@@ -27,7 +27,8 @@ RUN apt-get update -y && apt-get upgrade -y \
     libzip-dev \
     zip \
     git \
-    nano && \
+    nano \
+    logrotate && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pecl install memcached-3.1.5
@@ -61,13 +62,9 @@ RUN set -eux; \
 
 RUN a2enmod rewrite
 
-
-# SSH 2 seems to be part of PHP core now
-#RUN cd /tmp \
-#    && git clone https://github.com/php/pecl-networking-ssh2.git ssh2
-#RUN cd /tmp/ssh2/ \
-#    && .travis/build.sh
-#RUN docker-php-ext-enable ssh2
+# configure Apache rotate logs
+# In docker, we do not need to rotate Apache logs
+#COPY apache2-logrotate /etc/logrotate.d/apache2
 
 # install composer
 #RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -76,9 +73,16 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # set the php.ini
 RUN mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini && \
     sed -i "s@short_open_tag = Off@short_open_tag = On@g" /usr/local/etc/php/php.ini && \
-    sed -i "s@memory_limit = 128M@memory_limit = 512M@g" /usr/local/etc/php/php.ini
-
+    sed -i "s@memory_limit = 128M@memory_limit = 512M@g" /usr/local/etc/php/php.ini && \
+    sed -i "s@;session.cookie_secure =@session.cookie_secure = on@g" /usr/local/etc/php/php.ini && \
+    sed -i "s@session.cookie_secure = off@session.cookie_secure = on@g" /usr/local/etc/php/php.ini
 
 # Clean up the image
 RUN rm -rf /var/lib/apt/lists/*
 
+#RUN a2enmod ssl
+#COPY apache-ssl.conf /etc/apache2/conf-available/apache-ssl.conf
+#RUN sed -i 's/\[domain_name\]/-------------.gc.ca/g' /etc/apache2/conf-available/apache-ssl.conf
+#RUN ln -s /etc/apache2/conf-available/apache-ssl.conf /etc/apache2/conf-enabled/apache-ssl.conf
+
+#EXPOSE 443
