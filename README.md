@@ -20,18 +20,61 @@ ex:
 COPY files/appname-logrotate /etc/logrotate.d/appname
 ```
 
-## Using a certificate
-Copy the ```apache-ssl.conf``` to ```/etc/apache2/conf-enable```. This should be done by adding
-this line to your dockerfile
+## Using a SSL
+When building your image, you will have to add ```--build-arg ssl=true```
+
+Create a ```apache-ssl.conf``` in a ```ssl``` folder (see below)
+
+You will also need the key files in ```/var/www-certs/``` those are ```[domain_name].crt```,
+```[domain_name]-chain.crt``` and ```[domain_name].key```
+This should be done by adding a *volume* when you create the container
 
 ```
-COPY apache-ssl.conf /etc/apache2/apache-ssl.conf
-```
-You will also need the key files in /var/www-certs/ those are ```[domain_name].crt```,
-```[domain_name]-chain.crt``` and ```[domain_name].key```
-This should be done by adding a volume when you create the container
-```
 docker run -d --name base -p 80:80 -p 443:443 \
+    --build-arg ssl=true \
     -v /[path-to-certs]/certs:/var/www-certs:ro \
     php:8-base
+```
+
+###apache-ssl.conf
+```
+<IfModule mod_ssl.c>
+<VirtualHost *:80>
+    RewriteEngine On
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+</VirtualHost>
+<VirtualHost *:443>
+    ServerAdmin imsd.web-dsgi@hc-sc.gc.ca
+    documentRoot /var/www/html
+
+    <DirectoryMatch /var/www/html>
+        Require all granted
+        Options -Indexes
+        RewriteEngine On
+
+        RewriteCond %{REQUEST_FILENAME} -s [OR]
+        RewriteCond %{REQUEST_FILENAME} -d [OR]
+        RewriteCond %{REQUEST_FILENAME} -l
+        RewriteRule ^.*$ - [NC,L]
+        RewriteRule ^.*$ /index.php [NC,L]
+    </DirectoryMatch>
+
+    SSLEngine on
+
+    # Intermediate configuration, tweak to your needs
+    SSLProtocol             TLSv1.2
+    SSLCipherSuite          ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:!DSS
+    #SSLProtocol             TLSv1.3
+    #SSLCipherSuite          TLS_AES_256_GCM_SHA384:TLS_AES_128_GCM_SHA256:TLS_AES_128_CCM_SHA256
+    SSLHonorCipherOrder     on
+
+    SSLOptions +StrictRequire
+    SSLCertificateFile /var/www-certs/[domain-name].crt
+    SSLCertificateKeyFile /var/www-certs/[domain-name].key
+    SSLCertificateChainFile /var/www-certs/[domain-name]-chain.crt
+
+    # Header edit Set-Cookie (?i)^(.*)(;\s*secure)??((\s*;)?(.*)) "$1; Secure$3$4"
+</VirtualHost>
+</IfModule>
 ```
