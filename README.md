@@ -37,7 +37,7 @@ docker run -d --name base -p 80:80 -p 443:443 \
     php:8-base
 ```
 
-###apache-ssl.conf
+### apache-ssl.conf
 ```
 <IfModule mod_ssl.c>
 <VirtualHost *:80>
