@@ -25,9 +25,10 @@ When building your image, you will have to add ```--build-arg ssl=true```
 
 Create a ```apache-ssl.conf``` in a ```ssl``` folder (see below)
 
-You will also need the key files in ```/var/www-certs/``` those are ```[domain_name].crt```,
-```[domain_name]-chain.crt``` and ```[domain_name].key```
+You will also need the key files in ```/var/www-certs/``` those are ```certificate-public.crt```,
+```certificate-chain.crt``` and ```certificate-private.key```
 This should be done by adding a *volume* when you create the container
+
 
 ```
 docker run -d --name base -p 80:80 -p 443:443 \
@@ -45,6 +46,7 @@ docker run -d --name base -p 80:80 -p 443:443 \
     RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
 </VirtualHost>
 <VirtualHost *:443>
+    Header always append Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
     ServerAdmin imsd.web-dsgi@hc-sc.gc.ca
     documentRoot /var/www/html
 
@@ -70,9 +72,9 @@ docker run -d --name base -p 80:80 -p 443:443 \
     SSLHonorCipherOrder     on
 
     SSLOptions +StrictRequire
-    SSLCertificateFile /var/www-certs/[domain-name].crt
-    SSLCertificateKeyFile /var/www-certs/[domain-name].key
-    SSLCertificateChainFile /var/www-certs/[domain-name]-chain.crt
+    SSLCertificateFile /var/www-certs/certificate-public.crt
+    SSLCertificateKeyFile /var/www-certs/certificate-private.key
+    SSLCertificateChainFile /var/www-certs/certificate-chain.crt
 
     # Header edit Set-Cookie (?i)^(.*)(;\s*secure)??((\s*;)?(.*)) "$1; Secure$3$4"
 </VirtualHost>
