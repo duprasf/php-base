@@ -67,7 +67,6 @@ RUN a2enmod rewrite
 #COPY apache2-logrotate /etc/logrotate.d/apache2
 
 # install composer
-#RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # set the php.ini

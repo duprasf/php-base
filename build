@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-docker build -t php-8-base .
+docker build -t php-base .
