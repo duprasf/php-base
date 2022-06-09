@@ -1,4 +1,2 @@
 #!/usr/bin/env bash
-docker stop whmb
-docker rm whmb
-docker build -t php:8-base .
+docker build -t php-8-base .

@@ -53,17 +53,17 @@ pipeline {
                         docker login -u ${USR} -p ${PWD} ${
                             containerRegistry
                         }
-                        docker build -t php:${version} -t php:latest .
-                        docker tag php:${version} ${containerRegistry}/php/php:${version}
-                        docker tag php:latest ${containerRegistry}/php/php:latest
+                        docker build -t php-base:${version} -t php-base:latest .
+                        docker tag php-base:${version} ${containerRegistry}/php/php-base:${version}
+                        docker tag php:latest ${containerRegistry}/php/php-base:latest
                     """
                 }
                 script {
                     def buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php:${version}", 'docker-local'
+                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:${version}", 'docker-local'
                     buildInfo.append buildInfoTemp
                     def buildInfoTempLatest
-                    buildInfoTempLatest = artifactoryDocker.push "${containerRegistry}/php/php:latest", 'docker-local'
+                    buildInfoTempLatest = artifactoryDocker.push "${containerRegistry}/php/php-base:latest", 'docker-local'
                     buildInfo.append buildInfoTempLatest
                 }
             }

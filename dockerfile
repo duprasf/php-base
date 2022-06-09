@@ -1,4 +1,4 @@
-FROM php:8-apache
+FROM php:8.1-apache
 
 WORKDIR /var/www
 
@@ -79,8 +79,6 @@ RUN mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini && \
 RUN a2enmod headers ssl
 COPY apache-ssl.conf /etc/apache2/conf-available/apache-ssl.conf
 RUN ln -s /etc/apache2/conf-available/apache-ssl.conf /etc/apache2/conf-enabled/apache-ssl.conf
-RUN sed -i "s@;session.cookie_secure =@session.cookie_secure = on@g" /usr/local/etc/php/php.ini && \
-    sed -i "s@session.cookie_secure = off@session.cookie_secure = on@g" /usr/local/etc/php/php.ini
 
 
 # Clean up the image
