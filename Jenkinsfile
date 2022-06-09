@@ -55,7 +55,7 @@ pipeline {
                         }
                         docker build -t php-base:${version} -t php-base:latest .
                         docker tag php-base:${version} ${containerRegistry}/php/php-base:${version}
-                        docker tag php:latest ${containerRegistry}/php/php-base:latest
+                        docker tag php-base:latest ${containerRegistry}/php/php-base:latest
                     """
                 }
                 script {
