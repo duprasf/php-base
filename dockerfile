@@ -62,10 +62,6 @@ RUN set -eux; \
 
 RUN a2enmod rewrite
 
-# configure Apache rotate logs
-# In docker, we do not need to rotate Apache logs
-#COPY apache2-logrotate /etc/logrotate.d/apache2
-
 # install composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -74,13 +70,9 @@ RUN mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini && \
     sed -i "s@short_open_tag = Off@short_open_tag = On@g" /usr/local/etc/php/php.ini && \
     sed -i "s@memory_limit = 128M@memory_limit = 512M@g" /usr/local/etc/php/php.ini
 
-# setup the SSL/HTTPS
-RUN a2enmod headers ssl
-COPY apache-ssl.conf /etc/apache2/conf-available/apache-ssl.conf
-RUN ln -s /etc/apache2/conf-available/apache-ssl.conf /etc/apache2/conf-enabled/apache-ssl.conf
-
-
 # Clean up the image
 RUN rm -rf /var/lib/apt/lists/*
 
-EXPOSE 443
+COPY go-php.sh /go-php.sh
+RUN chmod 774 /go-php.sh
+CMD ["/go-php.sh"]
