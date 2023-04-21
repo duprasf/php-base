@@ -28,15 +28,15 @@ RUN apt-get update -y && apt-get upgrade -y \
     zip \
     git \
     nano \
-    logrotate && \
-    rm -rf /var/lib/apt/lists/*
+    logrotate
 
 RUN pecl install memcached-3.1.5
 RUN docker-php-ext-enable memcached
 
 # lines for LDAP
-#RUN apt-get update -y && apt-get upgrade -y libldap2-dev \
-#    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && docker-php-ext-install ldap \
+RUN apt-get upgrade -y libldap2-dev \
+    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
+    && docker-php-ext-install ldap
 
 
 RUN set -eux; \
@@ -47,13 +47,13 @@ RUN set -eux; \
     docker-php-ext-configure zip; \
     docker-php-ext-install -j "$(nproc)" \
         gd \
+        zip \
         intl \
-        mysqli \
-        opcache \
-        gettext  \
-        pdo_mysql \
-        pdo_sqlite \
-        zip
+        mysqli\
+        opcache\
+        gettext \
+        pdo_mysql\
+        pdo_sqlite
 
 
 # install imagick
