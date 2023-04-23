@@ -34,10 +34,9 @@ RUN pecl install memcached-3.1.5
 RUN docker-php-ext-enable memcached
 
 # lines for LDAP
-RUN apt-get upgrade -y libldap2-dev \
-    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
-    && docker-php-ext-install ldap
-
+RUN apt-get install -y libldap2-dev libldap-common
+RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/
+RUN docker-php-ext-install ldap
 
 RUN set -eux; \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
