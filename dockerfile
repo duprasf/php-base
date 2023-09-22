@@ -27,8 +27,7 @@ RUN apt-get update -y && apt-get upgrade -y \
     libzip-dev \
     zip \
     git \
-    nano \
-    logrotate
+    nano
 
 RUN pecl install memcached-3.1.5
 RUN docker-php-ext-enable memcached

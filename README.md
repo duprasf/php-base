@@ -1,21 +1,14 @@
 # php-base
+This should be the base for most PHP apps.
 
-## Use LogRotate
-Create a logfile configuration, name the file the name of your application.
-The content of the file should be as follow
+## Params
+You can use environment variable to configure the upload size and memory limit with these variables.
+By default, the upload limit is 2 MB and the memory limit is at 512 MB.
+
 ```
-/[path to your logs]/* {
-    daily
-    rotate 31
-    maxage 31
-    size 2M
-    compress
-    delaycompress
-}
+UPLOAD_SIZE=2M
+MEMORY_LIMIT=512M
 ```
 
-In your dockerfile, copy the file in ```/etc/logrotate.d/[your app name]]]```
-ex:
-```
-COPY files/appname-logrotate /etc/logrotate.d/appname
-```
+# Testing locally
+If you want to test your application locally, you can ./build and use the ./start.sh script as a starting point.
