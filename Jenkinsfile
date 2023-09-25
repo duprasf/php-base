@@ -23,14 +23,14 @@ pipeline {
                 checkout scm
                 script {
 
-                    def properties = readProperties  file: 'appmeta.properties'
+                    #def properties = readProperties  file: 'appmeta.properties'
 
                     //Get basic meta-data
-                    rootGroup = properties.root_group
-                    rootVersion = properties.root_version
+                    rootGroup = 'web-mobile'
                     buildId = env.BUILD_ID
-                    version = rootVersion + "." + (buildId ? buildId : "MANUAL-BUILD")
-                    module = rootGroup
+                    version81="8.1v" + (buildId ? buildId : "MANUAL-BUILD")
+                    version82="8.2v" + (buildId ? buildId : "MANUAL-BUILD")
+                    module=rootGroup
 
                     // Setup Artifactory connection
                     artifactoryServer = Artifactory.server 'default'
@@ -53,14 +53,19 @@ pipeline {
                         docker login -u ${USR} -p ${PWD} ${
                             containerRegistry
                         }
-                        docker build -t php-base:${version} -t php-base:latest .
-                        docker tag php-base:${version} ${containerRegistry}/php/php-base:${version}
+                        docker pull php:8.1-apache
+                        docker build -t php-base:${version81} .
+                        docker tag php-base:${version81} ${containerRegistry}/php/php-base:${version81}
+
+                        docker pull php:8.2-apache
+                        docker build -t php-base:${version82} -t php-base:latest -f dockerfile82 .
+                        docker tag php-base:${version82} ${containerRegistry}/php/php-base:${version82}
                         docker tag php-base:latest ${containerRegistry}/php/php-base:latest
                     """
                 }
                 script {
                     def buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:${version}", 'docker-local'
+                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:${version81}", 'docker-local'
                     buildInfo.append buildInfoTemp
                     def buildInfoTempLatest
                     buildInfoTempLatest = artifactoryDocker.push "${containerRegistry}/php/php-base:latest", 'docker-local'
@@ -96,7 +101,7 @@ pipeline {
             script {
                 jiraIssueSelector(issueSelector: [$class: 'DefaultIssueSelector'])
                         .each {
-                    id -> jiraComment body: "*Build Result ${resultString}* Module: ${module} appmeta: ${version} [Details|${env.BUILD_URL}]", issueKey: id
+                    id -> jiraComment body: "*Build Result ${resultString}* Module: ${module} appmeta: ${version81} [Details|${env.BUILD_URL}]", issueKey: id
                 }
             }
         }
