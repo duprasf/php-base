@@ -23,7 +23,7 @@ pipeline {
                 checkout scm
                 script {
 
-                    #def properties = readProperties  file: 'appmeta.properties'
+                    // def properties = readProperties  file: 'appmeta.properties'
 
                     //Get basic meta-data
                     rootGroup = 'web-mobile'
