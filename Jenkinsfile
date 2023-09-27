@@ -5,7 +5,7 @@
 
 pipeline {
     agent {
-        label 'DockerV1'
+        label 'standardv1'
     }
 
     options { disableConcurrentBuilds() }
