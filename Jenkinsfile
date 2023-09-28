@@ -54,12 +54,14 @@ pipeline {
                             containerRegistry
                         }
                         docker pull php:8.1-apache
-                        docker build -t php-base:${version81} .
+                        docker build -t php-base:${version81} -t php-base:8.1 .
                         docker tag php-base:${version81} ${containerRegistry}/php/php-base:${version81}
+                        docker tag php-base:8.1 ${containerRegistry}/php/php-base:8.1
 
                         docker pull php:8.2-apache
-                        docker build -t php-base:${version82} -t php-base:latest -f dockerfile82 .
+                        docker build -t php-base:${version82} -t php-base:8.2 -t php-base:latest -f dockerfile82 .
                         docker tag php-base:${version82} ${containerRegistry}/php/php-base:${version82}
+                        docker tag php-base:8.2 ${containerRegistry}/php/php-base:8.2
                         docker tag php-base:latest ${containerRegistry}/php/php-base:latest
                     """
                 }
