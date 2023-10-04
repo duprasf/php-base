@@ -6,4 +6,6 @@ if [ ! -z "$PHP_DEV_ENV" ] && [ "${PHP_DEV_ENV}" == "1" ]; then
     . /tmp/php-opcache
 fi
 
+POST_MAX_SIZE=$UPLOAD_SIZE
+
 apache2-foreground

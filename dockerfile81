@@ -12,7 +12,8 @@ ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS="0" \
     PHP_OPCACHE_MEMORY_CONSUMPTION="192" \
     PHP_OPCACHE_MAX_WASTED_PERCENTAGE="10" \
     MEMORY_LIMIT="512M" \
-    UPLOAD_SIZE="10M"
+    UPLOAD_SIZE="10M" \
+    POST_MAX_SIZE="10M"
 
 # update the OS and install common modules
 RUN apt-get update -y && apt-get upgrade -y \
@@ -75,7 +76,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini && \
     sed -i "s@short_open_tag = Off@short_open_tag = On@g" /usr/local/etc/php/php.ini && \
     sed -i "s@memory_limit = .*@memory_limit = \${MEMORY_LIMIT}@g" /usr/local/etc/php/php.ini && \
-    sed -i "s@upload_max_filesize = .*@upload_max_filesize = \${UPLOAD_SIZE}@g" /usr/local/etc/php/php.ini
+    sed -i "s@upload_max_filesize = .*@upload_max_filesize = \${UPLOAD_SIZE}@g" /usr/local/etc/php/php.ini && \
+    sed -i "s@post_max_size = .*@post_max_size = \${POST_MAX_SIZE}@g" /usr/local/etc/php/php.ini
 
 COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 

@@ -28,8 +28,8 @@ pipeline {
                     //Get basic meta-data
                     rootGroup = 'web-mobile'
                     buildId = env.BUILD_ID
-                    version81="8.1v" + (buildId ? buildId : "MANUAL-BUILD")
-                    version82="8.2v" + (buildId ? buildId : "MANUAL-BUILD")
+                    version81="8.1b" + (buildId ? buildId : "MANUAL-BUILD")
+                    version82="8.2b" + (buildId ? buildId : "MANUAL-BUILD")
                     module=rootGroup
 
                     // Setup Artifactory connection
@@ -54,7 +54,7 @@ pipeline {
                             containerRegistry
                         }
                         docker pull php:8.1-apache
-                        docker build -t php-base:${version81} -t php-base:8.1 .
+                        docker build -t php-base:${version81} -t php-base:8.1 -f dockerfile81 .
                         docker tag php-base:${version81} ${containerRegistry}/php/php-base:${version81}
                         docker tag php-base:8.1 ${containerRegistry}/php/php-base:8.1
 
