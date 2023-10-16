@@ -84,6 +84,5 @@ COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 # Clean up the image
 RUN rm -rf /var/lib/apt/lists/*
 
-COPY go-php.sh /go-php.sh
-RUN chmod 774 /go-php.sh
+COPY --chmod=774 go-php.sh /go-php.sh
 ENTRYPOINT ["/go-php.sh"]
