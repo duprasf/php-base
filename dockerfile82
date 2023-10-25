@@ -31,15 +31,14 @@ RUN apt-get update -y && apt-get upgrade -y \
     memcached \
     default-mysql-client \
     libsqlite3-dev \
+    openssl \
+    libssl-dev \
     libmagickwand-dev \
     unzip \
     libzip-dev \
     zip \
     git \
     nano
-
-#RUN pecl install memcached-3.1.5
-#RUN docker-php-ext-enable memcached
 
 # lines for LDAP
 RUN apt-get install -y libldap2-dev libldap-common
