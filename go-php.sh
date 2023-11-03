@@ -8,4 +8,8 @@ fi
 
 POST_MAX_SIZE=$UPLOAD_SIZE
 
+if [[ -f "/go-application.sh" ]]; then
+    source /go-application.sh
+fi
+
 apache2-foreground
