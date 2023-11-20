@@ -64,9 +64,10 @@ pipeline {
                         docker tag php-base:8.2 ${containerRegistry}/php/php-base:8.2
                         docker tag php-base:latest ${containerRegistry}/php/php-base:latest
 
-                        docker build -t php-base:${version82}-mongodb -t php-base:8.2-mongodb -f dockerfile82-mongodb .
+                        docker build -t php-base:${version82}-mongodb -t php-base:8.2-mongodb -t php-base:latest-mongodb -f dockerfile82-mongodb .
                         docker tag php-base:${version82}-mongodb ${containerRegistry}/php/php-base:${version82}-mongodb
                         docker tag php-base:8.2-mongodb ${containerRegistry}/php/php-base:8.2-mongodb
+                        docker tag php-base:latest-mongodb ${containerRegistry}/php/php-base:latest-mongodb
                     """
                 }
                 script {
@@ -82,6 +83,8 @@ pipeline {
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:${version82}-mongodb", 'docker-local'
                     buildInfo.append buildInfoTemp
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.2-mongodb", 'docker-local'
+                    buildInfo.append buildInfoTemp
+                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:latest-mongodb", 'docker-local'
                     buildInfo.append buildInfoTemp
                     def buildInfoTempLatest
                     buildInfoTempLatest = artifactoryDocker.push "${containerRegistry}/php/php-base:latest", 'docker-local'
