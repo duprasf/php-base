@@ -72,12 +72,7 @@ RUN a2enmod rewrite
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # set the php.ini
-RUN mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini && \
-    sed -i "s@short_open_tag = Off@short_open_tag = On@g" /usr/local/etc/php/php.ini && \
-    sed -i "s@memory_limit = .*@memory_limit = \${MEMORY_LIMIT}@g" /usr/local/etc/php/php.ini && \
-    sed -i "s@upload_max_filesize = .*@upload_max_filesize = \${UPLOAD_SIZE}@g" /usr/local/etc/php/php.ini && \
-    sed -i "s@post_max_size = .*@post_max_size = \${POST_MAX_SIZE}@g" /usr/local/etc/php/php.ini
-
+COPY php.ini /usr/local/etc/php/php.ini
 COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 # Clean up the image

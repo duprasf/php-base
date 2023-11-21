@@ -6,8 +6,18 @@ You can use environment variable to configure the upload size and memory limit w
 By default, the upload limit is 10 MB and the memory limit is at 512 MB.
 
 ```
-UPLOAD_SIZE=10M
-MEMORY_LIMIT=512M
+PHP_MEMORY_LIMIT=512M
+PHP_UPLOAD_SIZE=10M
+```
+
+## OP Cache
+Parameters are available to configure the PHP OP Cache using these environment variables.
+
+```
+PHP_OPCACHE_VALIDATE_TIMESTAMPS=0 (set to 1 if PHP_DEV_ENV is set to 1)
+PHP_OPCACHE_MAX_ACCELERATED_FILES=10000
+PHP_OPCACHE_MEMORY_CONSUMPTION=192
+PHP_OPCACHE_MAX_WASTED_PERCENTAGE=10
 ```
 
 # For dev environment
