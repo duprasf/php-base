@@ -101,22 +101,30 @@ pipeline {
                     buildInfo.append buildInfoTemp
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:7.3", 'docker-local'
                     buildInfo.append buildInfoTemp
+
+                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.1", 'docker-local'
+                    buildInfo.append buildInfoTemp
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.1${currentVersion}", 'docker-local'
                     buildInfo.append buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.1", 'docker-local'
+
+                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.2", 'docker-local'
                     buildInfo.append buildInfoTemp
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.2${currentVersion}", 'docker-local'
                     buildInfo.append buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.2", 'docker-local'
+                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.2-mongodb", 'docker-local'
                     buildInfo.append buildInfoTemp
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.2${currentVersion}-mongodb", 'docker-local'
                     buildInfo.append buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.2-mongodb", 'docker-local'
+
+                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.3", 'docker-local'
                     buildInfo.append buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.3${currentVersion}-mongodb", 'docker-local'
+                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.3${currentVersion}", 'docker-local'
                     buildInfo.append buildInfoTemp
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.3-mongodb", 'docker-local'
                     buildInfo.append buildInfoTemp
+                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.3${currentVersion}-mongodb", 'docker-local'
+                    buildInfo.append buildInfoTemp
+
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:latest-mongodb", 'docker-local'
                     buildInfo.append buildInfoTemp
                     def buildInfoTempLatest
