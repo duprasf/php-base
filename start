@@ -8,6 +8,7 @@ docker run -d --name php-base -p 80:80 \
     -v /etc/localtime:/etc/localtime:ro \
     -v /etc/timezone:/etc/timezone:ro \
     --restart unless-stopped \
+    --log-opt max-size=10m \
     -e PHP_DEV_ENV=1 \
     -v /docker/php-base-test-app:/var/www/html \
     php-base

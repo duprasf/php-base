@@ -1,8 +1,9 @@
-FROM php:8.1-apache
+# This should only be used for older projects
+FROM php:7.3-apache
 
 WORKDIR /var/www
 
-LABEL title = 'PHP8-base with composer, git and other essentials'
+LABEL title = 'PHP7.3-base for older projects'
 LABEL author = 'Web/Mobile Team (imsd.web-dsgi@hc-sc.gc.ca)'
 LABEL source = 'https://github.hc-sc.gc.ca/hs/php-base'
 
@@ -40,18 +41,14 @@ RUN apt-get update -y && apt-get upgrade -y \
     git \
     nano
 
-# lines for LDAP
-RUN apt-get install -y libldap2-dev libldap-common
-RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/
-RUN docker-php-ext-install ldap
+RUN set -eux;
 
-RUN set -eux; \
-    docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
-    docker-php-ext-configure intl; \
-    docker-php-ext-configure mysqli --with-mysqli=mysqlnd; \
-    docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd; \
-    docker-php-ext-configure zip; \
-    docker-php-ext-install -j "$(nproc)" \
+#RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp;
+RUN docker-php-ext-configure intl;
+RUN docker-php-ext-configure mysqli --with-mysqli=mysqlnd;
+RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd;
+RUN docker-php-ext-configure zip;
+RUN docker-php-ext-install -j "$(nproc)" \
         gd \
         zip \
         intl \
@@ -60,11 +57,6 @@ RUN set -eux; \
         gettext \
         pdo_mysql\
         pdo_sqlite
-
-
-# install imagick
-#RUN pecl install imagick
-#RUN docker-php-ext-enable imagick
 
 RUN a2enmod rewrite
 

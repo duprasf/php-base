@@ -1,9 +1,20 @@
 #!/usr/bin/env bash
+DOCKER_BUILDKIT=1
+
+docker pull php:7.1-apache
+docker build -t php-base:7.1 -f dockerfile71 .
+
+docker pull php:7.3-apache
+docker build -t php-base:7.3 -f dockerfile73 .
+
 docker pull php:8.1-apache
 docker build -t php-base:8.1 -f dockerfile81 .
+docker build -t php-base:8.1-mongodb -f dockerfile81-mongodb .
 
 docker pull php:8.2-apache
 docker build -t php-base:8.2 -t php-base:latest -f dockerfile82 .
+docker build -t php-base:8.2-mongodb -f dockerfile82-mongodb .
 
-docker build -t php-base:8.1-mongodb -f dockerfile81-mongodb .
-docker build -t php-base:8.2-mongodb -t php-base:latest-mongodb -f dockerfile82-mongodb .
+#docker pull php:8.3-apache
+#docker build -t php-base:8.3 -t php-base:latest -f dockerfile83 --target base .
+#docker build -t php-base:8.3 -t php-base:latest-mongodb -f dockerfile83 --target mongodb .
