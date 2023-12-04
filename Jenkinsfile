@@ -86,7 +86,7 @@ pipeline {
                         docker tag php-base:8.3${currentVersion} ${containerRegistry}/php/php-base:8.3${currentVersion}
                         docker tag php-base:8.3 ${containerRegistry}/php/php-base:8.3
 
-                        docker build -t php-base:8.3${currentVersion}-mongodb -t php-base:8.3-mongodb -f dockerfile82-mongodb --target mongodb .
+                        docker build -t php-base:8.3${currentVersion}-mongodb -t php-base:8.3-mongodb -f dockerfile83-mongodb --target mongodb .
                         docker tag php-base:8.3${currentVersion}-mongodb ${containerRegistry}/php/php-base:8.3${currentVersion}-mongodb
                         docker tag php-base:8.3-mongodb ${containerRegistry}/php/php-base:8.3-mongodb
                     """

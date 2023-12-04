@@ -15,6 +15,6 @@ docker pull php:8.2-apache
 docker build -t php-base:8.2 -t php-base:latest -f dockerfile82 .
 docker build -t php-base:8.2-mongodb -f dockerfile82-mongodb .
 
-#docker pull php:8.3-apache
-#docker build -t php-base:8.3 -t php-base:latest -f dockerfile83 --target base .
-#docker build -t php-base:8.3 -t php-base:latest-mongodb -f dockerfile83 --target mongodb .
+docker pull php:8.3-apache
+docker build -t php-base:8.3 -t php-base:latest -f dockerfile83 --target base .
+docker build -t php-base:8.3 -t php-base:latest-mongodb -f dockerfile83 --target mongodb .
