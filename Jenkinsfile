@@ -20,19 +20,17 @@ pipeline {
 
         stage('appmeta Info') {
             steps {
+                // Clean before build
+                cleanWs()
+                // We need to explicitly checkout from SCM here
                 checkout scm
                 script {
-
-                    // def properties = readProperties  file: 'appmeta.properties'
-
                     //Get basic meta-data
-                    rootGroup = 'web-mobile'
                     buildId = env.BUILD_ID
                     currentVersion="b" + (buildId ? buildId : "MANUAL-BUILD")
                     version81="8.1b" + (buildId ? buildId : "MANUAL-BUILD")
                     version82="8.2b" + (buildId ? buildId : "MANUAL-BUILD")
                     version83="8.3b" + (buildId ? buildId : "MANUAL-BUILD")
-                    module=rootGroup
 
                     // Setup Artifactory connection
                     artifactoryServer = Artifactory.server 'default'
@@ -143,7 +141,7 @@ pipeline {
         }
         success {
             script {
-                resultString = "Success ☼"
+                resultString = "Success 🌞"
             }
         }
         unstable {
@@ -161,7 +159,7 @@ pipeline {
             script {
                 jiraIssueSelector(issueSelector: [$class: 'DefaultIssueSelector'])
                         .each {
-                    id -> jiraComment body: "*Build Result ${resultString}* Module: ${module} appmeta: PHP Base (up to 8.3${currentVersion}) [Details|${env.BUILD_URL}]", issueKey: id
+                    id -> jiraComment body: "*Build Result ${resultString}* appmeta: PHP Base (up to 8.3${currentVersion}) [Details|${env.BUILD_URL}]", issueKey: id
                 }
             }
         }
