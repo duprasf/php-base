@@ -69,24 +69,24 @@ pipeline {
                         docker tag php-base:8.1 ${containerRegistry}/php/php-base:8.1
 
                         docker pull php:8.2-apache
-                        docker build -t php-base:8.2${currentVersion} -t php-base:8.2 -t php-base:latest -f dockerfile82 .
+                        docker build -t php-base:8.2${currentVersion} -t php-base:8.2 -f dockerfile82 .
                         docker tag php-base:8.2${currentVersion} ${containerRegistry}/php/php-base:8.2${currentVersion}
                         docker tag php-base:8.2 ${containerRegistry}/php/php-base:8.2
-                        docker tag php-base:latest ${containerRegistry}/php/php-base:latest
 
-                        docker build -t php-base:8.2${currentVersion}-mongodb -t php-base:8.2-mongodb -t php-base:latest-mongodb -f dockerfile82-mongodb .
+                        docker build -t php-base:8.2${currentVersion}-mongodb -t php-base:8.2-mongodb -f dockerfile82-mongodb .
                         docker tag php-base:8.2${currentVersion}-mongodb ${containerRegistry}/php/php-base:8.2${currentVersion}-mongodb
                         docker tag php-base:8.2-mongodb ${containerRegistry}/php/php-base:8.2-mongodb
-                        docker tag php-base:latest-mongodb ${containerRegistry}/php/php-base:latest-mongodb
 
                         docker pull php:8.3-apache
-                        docker build -t php-base:8.3${currentVersion} -t php-base:8.3 -f dockerfile83 --target base .
+                        docker build -t php-base:8.3${currentVersion} -t php-base:8.3 -t php-base:latest -f dockerfile83 --target base .
                         docker tag php-base:8.3${currentVersion} ${containerRegistry}/php/php-base:8.3${currentVersion}
                         docker tag php-base:8.3 ${containerRegistry}/php/php-base:8.3
+                        docker tag php-base:latest ${containerRegistry}/php/php-base:latest
 
-                        docker build -t php-base:8.3${currentVersion}-mongodb -t php-base:8.3-mongodb -f dockerfile83 --target mongodb .
+                        docker build -t php-base:8.3${currentVersion}-mongodb -t php-base:8.3-mongodb -t php-base:latest-mongodb -f dockerfile83 --target mongodb .
                         docker tag php-base:8.3${currentVersion}-mongodb ${containerRegistry}/php/php-base:8.3${currentVersion}-mongodb
                         docker tag php-base:8.3-mongodb ${containerRegistry}/php/php-base:8.3-mongodb
+                        docker tag php-base:latest-mongodb ${containerRegistry}/php/php-base:latest-mongodb
                     """
                 }
                 script {
