@@ -2,13 +2,27 @@
 docker stop php-base
 docker rm php-base
 
-echo 'Starting docker server, by :latest tag is currently PHP 8.2'
+echo 'Starting docker server, by :latest tag is currently PHP 8.3'
 
-docker run -d --name php-base -p 80:80 \
+DOMAIN=localdev.hc-sc.gc.ca
+NETWORK=appnet
+TRAEFIK_RULE='Host(`'$DOMAIN'`)'
+TRAEFIK_TLS_MAIN_DOMAIN=$DOMAIN
+TRAEFIK_TLS_SANS_DOMAIN=$DOMAIN,*.hc-sc.gc.ca
+
+docker run -d --name php-base \
     -v /etc/localtime:/etc/localtime:ro \
     -v /etc/timezone:/etc/timezone:ro \
     --restart unless-stopped \
     --log-opt max-size=10m \
     -e PHP_DEV_ENV=1 \
-    -v /docker/php-base-test-app:/var/www/html \
+    --label traefik.enable=true \
+    --label traefik.http.routers.php.rule=$TRAEFIK_RULE \
+    --label traefik.http.routers.php.entrypoints=websecure \
+    --label traefik.http.routers.php.tls=true \
+    --label traefik.http.routers.php.tls.domains[0].main=$TRAEFIK_TLS_MAIN_DOMAIN \
+    --label traefik.http.routers.php.tls.domains[0].sans=$TRAEFIK_TLS_SANS_DOMAIN \
+    --label traefik.http.routers.php_http.rule=$TRAEFIK_RULE \
+    --label traefik.http.routers.php_http.entrypoints=web \
+    -v /docker/php-base/locale:/var/www/html \
     php-base
