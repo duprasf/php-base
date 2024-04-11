@@ -5,7 +5,7 @@
 
 pipeline {
     agent {
-        label 'standardv1'
+        label 'DockerV1'
     }
 
     options {
