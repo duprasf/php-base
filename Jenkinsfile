@@ -8,7 +8,11 @@ pipeline {
         label 'standardv1'
     }
 
-    options { disableConcurrentBuilds() }
+    options {
+        // This is required if you want to clean before build
+        skipDefaultCheckout(true)
+        disableConcurrentBuilds()
+    }
 
     environment {
         containerRegistryCredentials = credentials('ARTIFACTORY_PUBLISH')
@@ -24,6 +28,7 @@ pipeline {
                 cleanWs()
                 // We need to explicitly checkout from SCM here
                 checkout scm
+
                 script {
                     //Get basic meta-data
                     buildId = env.BUILD_ID
@@ -135,6 +140,16 @@ pipeline {
 
     post {
         always {
+            cleanWs(cleanWhenNotBuilt: false,
+                deleteDirs: true,
+                disableDeferredWipeout: true,
+                notFailBuild: true,
+                patterns: [
+                    [pattern: '.gitignore', type: 'INCLUDE'],
+                    [pattern: '.propsfile', type: 'EXCLUDE']
+                ]
+            )
+
             script {
                 resultString = "None"
             }
