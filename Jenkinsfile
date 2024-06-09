@@ -140,13 +140,12 @@ pipeline {
 
     post {
         always {
-            cleanWs(cleanWhenNotBuilt: false,
+            cleanWs(cleanWhenNotBuilt: true,
                 deleteDirs: true,
                 disableDeferredWipeout: true,
                 notFailBuild: true,
                 patterns: [
-                    [pattern: '.gitignore', type: 'INCLUDE'],
-                    [pattern: '.propsfile', type: 'EXCLUDE']
+                    [pattern: '.gitignore', type: 'INCLUDE']
                 ]
             )
 

@@ -3,11 +3,13 @@ This should be the base for most PHP apps.
 
 ## Params
 You can use environment variable to configure the upload size and memory limit with these variables.
-By default, the upload limit is 10 MB and the memory limit is at 512 MB.
+By default, the upload limit is 10 MB and the memory limit is at 512 MB. You can also change the life
+time of the sessions, by default, the timeout is set to 30 hours
 
 ```
 PHP_MEMORY_LIMIT=512M
 PHP_UPLOAD_SIZE=10M
+PHP_SESSION_TIME=108000
 ```
 
 ## OP Cache
