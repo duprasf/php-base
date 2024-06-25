@@ -149,6 +149,31 @@ pipeline {
                 ]
             )
 
+            sh """
+                docker rmi php-base:7.1${currentVersion}
+                docker rmi php-base:7.1
+                docker rmi php-base:7.3${currentVersion}
+                docker rmi php-base:7.3
+
+                docker rmi php-base:8.1${currentVersion}
+                docker rmi php-base:8.1
+                docker rmi php-base:8.2${currentVersion}
+                docker rmi php-base:8.2
+
+                docker rmi php-base:8.2${currentVersion}-mongodb
+                docker rmi php-base:8.2-mongodb
+
+                docker rmi php-base:8.3${currentVersion}
+                docker rmi php-base:8.3
+                docker rmi php-base:latest
+
+                docker rmi php-base:8.3${currentVersion}-mongodb
+                docker rmi php-base:8.3-mongodb
+                docker rmi php-base:latest-mongodb
+
+                docker rmi composer:latest
+            """
+
             script {
                 resultString = "None"
             }
