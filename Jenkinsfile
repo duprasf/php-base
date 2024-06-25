@@ -171,7 +171,7 @@ pipeline {
                 docker rmi php-base:8.3-mongodb
                 docker rmi php-base:latest-mongodb
 
-                docker rmi composer:latest
+                docker image ls
             """
 
             script {
