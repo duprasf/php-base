@@ -63,11 +63,6 @@ pipeline {
                         docker tag php-base:7.1${currentVersion} ${containerRegistry}/php/php-base:7.1${currentVersion}
                         docker tag php-base:7.1 ${containerRegistry}/php/php-base:7.1
 
-                        docker pull php:7.3-apache
-                        docker build -t php-base:7.3${currentVersion} -t php-base:7.3 -f dockerfile73 .
-                        docker tag php-base:7.3${currentVersion} ${containerRegistry}/php/php-base:7.3${currentVersion}
-                        docker tag php-base:7.3 ${containerRegistry}/php/php-base:7.3
-
                         docker pull php:8.1-apache
                         docker build -t php-base:8.1${currentVersion} -t php-base:8.1 -f dockerfile81 .
                         docker tag php-base:8.1${currentVersion} ${containerRegistry}/php/php-base:8.1${currentVersion}
@@ -99,10 +94,6 @@ pipeline {
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:7.1${currentVersion}", 'docker-local'
                     buildInfo.append buildInfoTemp
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:7.1", 'docker-local'
-                    buildInfo.append buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:7.3${currentVersion}", 'docker-local'
-                    buildInfo.append buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:7.3", 'docker-local'
                     buildInfo.append buildInfoTemp
 
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.1", 'docker-local'
@@ -152,8 +143,6 @@ pipeline {
             sh """
                 docker rmi php-base:7.1${currentVersion}
                 docker rmi php-base:7.1
-                docker rmi php-base:7.3${currentVersion}
-                docker rmi php-base:7.3
 
                 docker rmi php-base:8.1${currentVersion}
                 docker rmi php-base:8.1
