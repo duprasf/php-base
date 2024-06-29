@@ -23,4 +23,5 @@ if [[ -f "/go-application.sh" ]]; then
     source /go-application.sh
 fi
 
+service cron start
 apache2-foreground

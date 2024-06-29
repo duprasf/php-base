@@ -43,17 +43,15 @@ RUN apt-get update -y && apt-get upgrade -y \
     libzip-dev \
     zip \
     git \
+    cron \
     nano
 
-RUN set -eux;
-
-#RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp;
-RUN docker-php-ext-configure intl;
-RUN docker-php-ext-configure mysqli --with-mysqli=mysqlnd;
-RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd;
-RUN docker-php-ext-configure zip;
-RUN docker-php-ext-install -j "$(nproc)" \
-        gd \
+RUN set -eux; \
+    docker-php-ext-configure intl; \
+    docker-php-ext-configure mysqli --with-mysqli=mysqlnd; \
+    docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd; \
+    docker-php-ext-configure zip; \
+    docker-php-ext-install -j "$(nproc)" \
         zip \
         intl \
         mysqli\
@@ -69,7 +67,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # set the php.ini
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
-COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 # Clean up the image
 RUN rm -rf /var/lib/apt/lists/*

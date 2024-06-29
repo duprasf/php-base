@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.2-apache AS base
 
 WORKDIR /var/www
 
@@ -22,11 +22,7 @@ ENV IN_DOCKER=1 \
 
 # update the OS and install common modules
 RUN apt-get update -y && apt-get upgrade -y \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
     libmcrypt-dev \
-    libpng-dev \
-    libwebp-dev \
     curl \
     libcurl4 \
     libcurl4-openssl-dev \
@@ -38,26 +34,24 @@ RUN apt-get update -y && apt-get upgrade -y \
     libsqlite3-dev \
     openssl \
     libssl-dev \
-    libmagickwand-dev \
     unzip \
     libzip-dev \
     zip \
     git \
+    cron \
     nano
 
 # lines for LDAP
-RUN apt-get install -y libldap2-dev libldap-common
-RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/
-RUN docker-php-ext-install ldap
+RUN apt-get install -y libldap2-dev libldap-common \
+    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
+    && docker-php-ext-install ldap
 
 RUN set -eux; \
-    docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
     docker-php-ext-configure intl; \
     docker-php-ext-configure mysqli --with-mysqli=mysqlnd; \
     docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd; \
     docker-php-ext-configure zip; \
     docker-php-ext-install -j "$(nproc)" \
-        gd \
         zip \
         intl \
         mysqli\
@@ -66,11 +60,6 @@ RUN set -eux; \
         pdo_mysql\
         pdo_sqlite
 
-
-# install imagick
-#RUN pecl install imagick
-#RUN docker-php-ext-enable imagick
-
 RUN a2enmod rewrite
 
 # install composer
@@ -78,10 +67,22 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # set the php.ini
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
-COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 # Clean up the image
 RUN rm -rf /var/lib/apt/lists/*
 
 COPY --chmod=774 go-php.sh /go-php.sh
 ENTRYPOINT ["/go-php.sh"]
+
+##############################################################
+## Building version with MongoDB
+##
+FROM base AS mongodb
+
+RUN pecl install mongodb \
+    &&  echo "extension=mongodb.so" > $PHP_INI_DIR/conf.d/mongo.ini
+# Clean up the image
+RUN rm -rf /var/lib/apt/lists/*
+
+
+
