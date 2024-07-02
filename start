@@ -18,6 +18,9 @@ VOLUME_MOUNT=/var/www/html
 # the environment variables file
 ENV_FILE="$PWD/environment/.env"
 
+# if not using traefik, this is the port to publish
+PORT='-p 80:80'
+
 # Name of the network, it will be created if it does not exists
 NETWORK=appnet
 
@@ -26,14 +29,9 @@ DOMAIN=localdev.hc-sc.gc.ca
 TRAEFIK_RULE='HostRegexp(`'$DOMAIN'`)'
 TRAEFIK_TLS_MAIN_DOMAIN=$DOMAIN
 TRAEFIK_TLS_SANS_DOMAIN=$DOMAIN,*.hc-sc.gc.ca
+ADD_HOST=''
+# We don't use traefik by default, if a running container named traefik is found we will use it
 USE_TRAEFIK=false
-# if not using traefik, this is the port to publish
-PORT='-p 80:80'
-
-# If a docker container called traefik exists, switch to using traefik
-if [ "$(docker ps -qf name=traefik)" ]; then
-    USE_TRAEFIK=true
-fi
 
 # check if https://jack.hc-sc.gc.ca can be reached. If it can, pull the remote image
 # -q : Silence mode
@@ -124,10 +122,23 @@ if [ -d "$VOLUME" ]; then
     MOUNT_VOLUME="-v $VOLUME:$VOLUME_MOUNT"
 fi
 
+# switch to using traefik automatically if a traefik container is running
+if [ "$(docker ps -qf name=traefik)" ]; then
+    USE_TRAEFIK=true
+    PORT=''
+    # get the IP for traefik
+    TRAEFIK_IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' traefik)
+    ADD_HOST="--add-host ${DOMAIN}:${TRAEFIK_IP}"
+fi
+
+ENV_FILE_STRING=""
+if [ -f "${ENV_FILE}" ]; then
+    ENV_FILE_STRING="--env-file $ENV_FILE"
+fi
+
+
 echo "Starting ${CONTAINER_NAME}..."
 docker run -d --name ${CONTAINER_NAME} --net $NETWORK $PORT \
-    -v /etc/localtime:/etc/localtime:ro \
-    -v /etc/timezone:/etc/timezone:ro \
     --restart unless-stopped \
     --label traefik.enable=$USE_TRAEFIK \
     --label traefik.http.routers.${APPNAME}.rule=$TRAEFIK_RULE \
@@ -137,7 +148,7 @@ docker run -d --name ${CONTAINER_NAME} --net $NETWORK $PORT \
     --label traefik.http.routers.${APPNAME}.tls.domains[0].sans=$TRAEFIK_TLS_SANS_DOMAIN \
     --label traefik.http.routers.${APPNAME}_http.rule=$TRAEFIK_RULE \
     --label traefik.http.routers.${APPNAME}_http.entrypoints=web \
-    --env-file $ENV_FILE \
+    $ENV_FILE_STRING \
     $MOUNT_VOLUME \
     $LAMINAS_DEVEL \
     ${IMAGE}:${APPTAG}
