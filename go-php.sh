@@ -23,5 +23,10 @@ if [[ -f "/go-application.sh" ]]; then
     source /go-application.sh
 fi
 
+# start cron
 service cron start
+
+# trap SIGINT and SIGTERM signals and gracefully exit
+trap "service cron stop; kill \$!; exit" SIGINT SIGTERM
+
 apache2-foreground
