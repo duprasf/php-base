@@ -111,12 +111,6 @@ if [ "${USE_TRAEFIK}" ]; then
     PORT=''
 fi
 
-# if developing Laminas (folder /docker/php-base-laminas exists), use the latest module files
-LAMINAS_DEVEL=""
-if [ -d "/docker/php-base-laminas/code/module" ]; then
-    echo "/docker/php-base-laminas found, mounting volume for latest modules"
-    LAMINAS_DEVEL="-v /docker/php-base-laminas/code/module:/var/www/module -v /docker/php-base-laminas/code/config:/var/www/config"
-fi
 
 if [ -d "$VOLUME" ]; then
     MOUNT_VOLUME="-v $VOLUME:$VOLUME_MOUNT"
@@ -150,5 +144,4 @@ docker run -d --name ${CONTAINER_NAME} --net $NETWORK $PORT \
     --label traefik.http.routers.${APPNAME}_http.entrypoints=web \
     $ENV_FILE_STRING \
     $MOUNT_VOLUME \
-    $LAMINAS_DEVEL \
     ${IMAGE}:${APPTAG}
