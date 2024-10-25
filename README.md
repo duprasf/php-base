@@ -37,6 +37,18 @@ if(getenv('PHP_DEV_ENV') == 1) {
 }
 ```
 
+# SSH support
+If your app required SSH connection to other server, copy these lines in your own dockerfile.
+The last two lines should be at the bottom of your dockerfile and server to clean the image
+so you have the smallest image possible.
+```
+RUN apt-get update && apt-get install -y libssh2-1-dev libssh2-1 \
+    && pecl install ssh2-1.4.1 \
+    && docker-php-ext-enable ssh2
+# Clean up the image
+RUN rm -rf /var/lib/apt/lists/*
+```
+
 
 # Testing locally
 If you want to test your application locally, you use ./build to build the image

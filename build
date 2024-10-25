@@ -7,7 +7,7 @@ DOCKER_BUILDKIT=1
 
 #docker build --pull -t php-base:8.1 -f dockerfile81 .
 
-#docker build --pull -t php-base:8.2 -t php-base:latest -f dockerfile82 .
+#docker build --pull -t php-base:8.2 -t php-base:latest -f dockerfile82 --target base .
 #docker build --pull -t php-base:8.2-mongodb -f dockerfile82 --target mongodb .
 
 docker build --pull -t php-base:8.3 -t php-base:latest -f dockerfile83 --target base .
