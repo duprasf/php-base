@@ -38,7 +38,6 @@ RUN apt-get update -y && apt-get upgrade -y \
     libzip-dev \
     zip \
     git \
-    cron \
     nano
 
 # lines for LDAP

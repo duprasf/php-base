@@ -36,6 +36,7 @@ pipeline {
                     version81="8.1b" + (buildId ? buildId : "MANUAL-BUILD")
                     version82="8.2b" + (buildId ? buildId : "MANUAL-BUILD")
                     version83="8.3b" + (buildId ? buildId : "MANUAL-BUILD")
+                    version84="8.4b" + (buildId ? buildId : "MANUAL-BUILD")
 
                     // Setup Artifactory connection
                     artifactoryServer = Artifactory.server 'default'
@@ -87,6 +88,15 @@ pipeline {
                         docker tag php-base:8.3${currentVersion}-mongodb ${containerRegistry}/php/php-base:8.3${currentVersion}-mongodb
                         docker tag php-base:8.3-mongodb ${containerRegistry}/php/php-base:8.3-mongodb
                         docker tag php-base:latest-mongodb ${containerRegistry}/php/php-base:latest-mongodb
+
+                        docker pull php:8.4-apache
+                        docker build -t php-base:8.4${currentVersion} -t php-base:8.4 -f dockerfile84 --target base .
+                        docker tag php-base:8.4${currentVersion} ${containerRegistry}/php/php-base:8.4${currentVersion}
+                        docker tag php-base:8.4 ${containerRegistry}/php/php-base:8.4
+
+                        docker build -t php-base:8.4${currentVersion}-mongodb -t php-base:8.4-mongodb -f dockerfile84 --target mongodb .
+                        docker tag php-base:8.4${currentVersion}-mongodb ${containerRegistry}/php/php-base:8.4${currentVersion}-mongodb
+                        docker tag php-base:8.4-mongodb ${containerRegistry}/php/php-base:8.4-mongodb
                     """
                 }
                 script {
@@ -117,6 +127,15 @@ pipeline {
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.3-mongodb", 'docker-local'
                     buildInfo.append buildInfoTemp
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.3${currentVersion}-mongodb", 'docker-local'
+                    buildInfo.append buildInfoTemp
+
+                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.4", 'docker-local'
+                    buildInfo.append buildInfoTemp
+                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.4${currentVersion}", 'docker-local'
+                    buildInfo.append buildInfoTemp
+                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.4-mongodb", 'docker-local'
+                    buildInfo.append buildInfoTemp
+                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.4${currentVersion}-mongodb", 'docker-local'
                     buildInfo.append buildInfoTemp
 
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:latest-mongodb", 'docker-local'
@@ -160,6 +179,12 @@ pipeline {
                 docker rmi php-base:8.3-mongodb
                 docker rmi php-base:latest-mongodb
 
+                docker rmi php-base:8.4${currentVersion}
+                docker rmi php-base:8.4
+
+                docker rmi php-base:8.4${currentVersion}-mongodb
+                docker rmi php-base:8.4-mongodb
+
                 docker image ls
             """
 
@@ -187,7 +212,7 @@ pipeline {
             script {
                 jiraIssueSelector(issueSelector: [$class: 'DefaultIssueSelector'])
                         .each {
-                    id -> jiraComment body: "*Build Result ${resultString}* appmeta: PHP Base (up to 8.3${currentVersion}) [Details|${env.BUILD_URL}]", issueKey: id
+                    id -> jiraComment body: "*Build Result ${resultString}* appmeta: PHP Base (up to 8.4${currentVersion}) [Details|${env.BUILD_URL}]", issueKey: id
                 }
             }
         }
