@@ -3,6 +3,7 @@
 if [ ! -z "$PHP_DEV_ENV" ] && [ "${PHP_DEV_ENV}" == "1" ]; then
     echo 'In dev mode, disabling OP Cache'
     PHP_OPCACHE_VALIDATE_TIMESTAMPS=1
+    PHP_OPCACHE_REVALIDATE_FREQ=1
 fi
 
 # backward compatibility
