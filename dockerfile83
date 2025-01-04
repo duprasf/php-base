@@ -2,9 +2,9 @@ FROM php:8.3-apache AS base
 
 WORKDIR /var/www
 
-LABEL title 'PHP8-base with composer, git and other essentials'
-LABEL author 'Web/Mobile Team (imsd.web-dsgi@hc-sc.gc.ca)'
-LABEL source 'https://github.hc-sc.gc.ca/hs/php-base-docker'
+LABEL title='PHP8-base with composer, git and other essentials'
+LABEL author='Web/Mobile Team (imsd.web-dsgi@hc-sc.gc.ca)'
+LABEL source='https://github.hc-sc.gc.ca/hs/php-base-docker'
 
 # default values for PROD
 ENV IN_DOCKER=1 \
