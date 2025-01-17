@@ -1,14 +1,35 @@
 #!/usr/bin/env bash
 DOCKER_BUILDKIT=1
 
-#docker build --pull -t php-base:7.1 -f dockerfile71 .
+args=("$@")
+args+=(php83)
 
-#docker build --pull -t php-base:7.3 -f dockerfile73 .
-
-#docker build --pull -t php-base:8.1 -f dockerfile81 .
-
-#docker build --pull -t php-base:8.2 -t php-base:latest -f dockerfile82 --target base .
-#docker build --pull -t php-base:8.2-mongodb -f dockerfile82 --target mongodb .
-
-docker build --pull -t php-base:8.3 -t php-base:latest -f dockerfile83 --target base .
-docker build --pull -t php-base:8.3-mongodb -t php-base:latest-mongodb -f dockerfile83 --target mongodb .
+for this in "${args[@]}"
+do
+    case "$this" in
+        php71 | --php71)
+            docker build --pull -t php-base:7.1 -f dockerfile71 .
+            ;;
+        php73 | --php73)
+            docker build --pull -t php-base:7.3 -f dockerfile73 .
+            ;;
+        php81 | --php81)
+            docker build --pull -t php-base:81 -f dockerfile81 .
+            ;;
+        php82 | --php82)
+            docker build --pull -t php-base:8.2 -f dockerfile82 .
+            docker build --pull -t php-base:8.2-mongodb -f dockerfile82 --target mongodb .
+            ;;
+        php83 | --php83)
+            docker build --pull -t php-base:8.3 -t php-base:latest -f dockerfile83 --target base .
+            docker build --pull -t php-base:8.3-mongodb -t php-base:latest-mongodb -f dockerfile83 --target mongodb .
+            ;;
+        php84 | --php84)
+            docker build --pull -t php-base:8.4 -t php-base:latest -f dockerfile84 --target base .
+            docker build --pull -t php-base:8.4-mongodb -t php-base:latest-mongodb -f dockerfile84 --target mongodb .
+            ;;
+        *)
+            echo "argument ${this} is unknown"
+            ;;
+    esac
+done
