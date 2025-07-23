@@ -59,11 +59,6 @@ pipeline {
                         docker login -u ${USR} -p ${PWD} ${
                             containerRegistry
                         }
-                        docker pull php:7.1-apache
-                        docker build -t php-base:7.1${currentVersion} -t php-base:7.1 -f dockerfile71 .
-                        docker tag php-base:7.1${currentVersion} ${containerRegistry}/php/php-base:7.1${currentVersion}
-                        docker tag php-base:7.1 ${containerRegistry}/php/php-base:7.1
-
                         docker pull php:8.1-apache
                         docker build -t php-base:8.1${currentVersion} -t php-base:8.1 -f dockerfile81 .
                         docker tag php-base:8.1${currentVersion} ${containerRegistry}/php/php-base:8.1${currentVersion}
