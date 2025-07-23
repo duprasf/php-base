@@ -22,6 +22,7 @@ ENV IN_DOCKER=1 \
     TZ="America/Toronto"
 
 # update the OS and install common modules
+RUN sed -i "s@http://@https://@g" /etc/apt/sources.list
 RUN apt-get update -y && apt-get upgrade -y \
     libmcrypt-dev \
     curl \
