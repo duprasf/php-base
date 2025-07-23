@@ -22,7 +22,8 @@ ENV IN_DOCKER=1 \
     TZ="America/Toronto"
 
 # update the OS and install common modules
-RUN sed -i "s@http://@https://@g" /etc/apt/sources.list
+RUN if test -f "/etc/apt/sources.list"; then sed -i "s@http://@https://@g" /etc/apt/sources.list; fi
+RUN if test -f "/etc/apt/sources.list.d/debian.sources"; then sed -i "s@http://@https://@g" /etc/apt/sources.list.d/debian.sources; fi
 RUN apt-get update -y && apt-get upgrade -y \
     libmcrypt-dev \
     curl \
