@@ -96,11 +96,6 @@ pipeline {
                 }
                 script {
                     def buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:7.1${currentVersion}", 'docker-local'
-                    buildInfo.append buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:7.1", 'docker-local'
-                    buildInfo.append buildInfoTemp
-
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.1", 'docker-local'
                     buildInfo.append buildInfoTemp
                     buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.1${currentVersion}", 'docker-local'
@@ -155,9 +150,6 @@ pipeline {
             )
 
             sh """
-                docker rmi php-base:7.1${currentVersion}
-                docker rmi php-base:7.1
-
                 docker rmi php-base:8.1${currentVersion}
                 docker rmi php-base:8.1
                 docker rmi php-base:8.2${currentVersion}
