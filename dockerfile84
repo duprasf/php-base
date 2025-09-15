@@ -21,6 +21,13 @@ ENV IN_DOCKER=1 \
     PHP_SESSION_TIME=108000 \
     TZ="America/Toronto"
 
+# ICM cert is the internal SSC certicate and set cronjob
+COPY icm-root.crt /usr/local/share/ca-certificates/icm-root.crt
+RUN cat /usr/local/share/ca-certificates/icm-root.crt >> /etc/ssl/certs/ca-certificates.crt
+COPY GOC-GDC-ROOT-A.crt /usr/local/share/ca-certificates/GOC-GDC-ROOT-A.crt
+RUN cat /usr/local/share/ca-certificates/GOC-GDC-ROOT-A.crt >> /etc/ssl/certs/ca-certificates.crt
+RUN update-ca-certificates
+
 # update the OS and install common modules
 RUN if test -f "/etc/apt/sources.list"; then sed -i "s@http://@https://@g" /etc/apt/sources.list; fi
 RUN if test -f "/etc/apt/sources.list.d/debian.sources"; then sed -i "s@http://@https://@g" /etc/apt/sources.list.d/debian.sources; fi
