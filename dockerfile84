@@ -19,7 +19,10 @@ ENV IN_DOCKER=1 \
     PHP_POST_MAX_SIZE="10M" \
     PHP_MAX_EXECUTION_TIME=30 \
     PHP_SESSION_TIME=108000 \
-    TZ="America/Toronto"
+    TZ="America/Toronto" \
+    COMPOSER_PREFER_STABLE=1
+
+RUN echo 'alias ll="ls -lah --color"' >> ~/.bashrc
 
 # ICM cert is the internal SSC certicate and set cronjob
 COPY icm-root.crt /usr/local/share/ca-certificates/icm-root.crt

@@ -21,6 +21,8 @@ ENV IN_DOCKER=1 \
     PHP_SESSION_TIME=108000 \
     TZ="America/Toronto"
 
+RUN echo 'alias ll="ls -lah --color"' >> ~/.bashrc
+
 # ICM cert is the internal SSC certicate and set cronjob
 COPY icm-root.crt /usr/local/share/ca-certificates/icm-root.crt
 RUN cat /usr/local/share/ca-certificates/icm-root.crt >> /etc/ssl/certs/ca-certificates.crt
