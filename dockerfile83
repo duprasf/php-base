@@ -77,7 +77,7 @@ RUN set -eux; \
         pdo_sqlite
 
 RUN a2enmod rewrite headers
-COPY security-update.conf /etc/apache2/conf-enabled/security-update.conf
+COPY security.conf /etc/apache2/conf-enabled/zzz-security.conf
 
 # install composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
