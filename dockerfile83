@@ -89,6 +89,8 @@ COPY php.ini /usr/local/etc/php/conf.d/php.ini
 RUN rm -rf /var/lib/apt/lists/*
 
 COPY --chmod=774 go-php.sh /go-php.sh
+RUN sed -i 's@\r@@g' /go-php.sh
+
 ENTRYPOINT ["/go-php.sh"]
 
 ##############################################################
