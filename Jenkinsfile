@@ -3,9 +3,17 @@
  *
  */
 
+@Library('devops-ea-shared-lib') _
+
+def buildAgent = create_agent(
+    team: "WBT",
+    vmss_name: "wbt_vmss_name",
+    resource_group: "wbt_resource_group"
+)
+
 pipeline {
     agent {
-        label 'DockerV1'
+        label "${buildAgent.agentName}"
     }
 
     options {
@@ -164,6 +172,8 @@ pipeline {
                     id -> jiraComment body: "*Build Result ${resultString}* appmeta: PHP Base (up to 8.4${currentVersion}) [Details|${env.BUILD_URL}]", issueKey: id
                 }
             }
+
+            destroy_agent(buildAgent)
         }
     }
 }
