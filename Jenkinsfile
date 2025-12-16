@@ -5,11 +5,11 @@
 
 @Library('devops-ea-shared-lib') _
 
-def agent = create_agent(team: "wbt")
+buildAgent = create_agent(team: "wbt")
 
 pipeline {
     agent {
-        label "${agent.agentName}"
+        label "${buildAgent.agentName}"
     }
 
     options {
@@ -169,7 +169,7 @@ pipeline {
                 }
             }
 
-            destroy_agent(agent)
+            destroy_agent(buildAgent)
         }
     }
 }
