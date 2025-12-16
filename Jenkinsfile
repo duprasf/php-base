@@ -20,8 +20,8 @@ pipeline {
 
     environment {
         containerRegistryCredentials = credentials('ARTIFACTORY_PUBLISH')
-        containerRegistry = 'jack.hc-sc.gc.ca'
-        containerRegistryPull = 'jack.hc-sc.gc.ca'
+        containerRegistry = 'artifactory.devops.hc-sc.gc.ca'
+        containerRegistryPull = 'artifactory.devops.hc-sc.gc.ca'
     }
 
     stages {
@@ -122,24 +122,6 @@ pipeline {
                     [pattern: '.gitignore', type: 'INCLUDE']
                 ]
             )
-
-            sh """
-                docker rmi php-base:8.3${currentVersion}
-                docker rmi php-base:8.3
-                docker rmi php-base:latest
-
-                docker rmi php-base:8.3${currentVersion}-mongodb
-                docker rmi php-base:8.3-mongodb
-                docker rmi php-base:latest-mongodb
-
-                docker rmi php-base:8.4${currentVersion}
-                docker rmi php-base:8.4
-
-                docker rmi php-base:8.4${currentVersion}-mongodb
-                docker rmi php-base:8.4-mongodb
-
-                docker image ls
-            """
 
             script {
                 resultString = "None"
