@@ -82,9 +82,13 @@ pipeline {
                         docker tag php-base:8.4-mongodb ${containerRegistry}/php/php-base:8.4-mongodb
 
                         docker push ${containerRegistry}/php/php-base:8.3
+                        docker push ${containerRegistry}/php/php-base:8.3${currentVersion}
                         docker push ${containerRegistry}/php/php-base:8.3-mongodb
+                        docker push ${containerRegistry}/php/php-base:8.3${currentVersion}-mongodb
+                        docker push ${containerRegistry}/php/php-base:8.4
+                        docker push ${containerRegistry}/php/php-base:8.4${currentVersion}
                         docker push ${containerRegistry}/php/php-base:8.4-mongodb
-                        docker push ${containerRegistry}/php/php-base:8.4-mongodb
+                        docker push ${containerRegistry}/php/php-base:8.4${currentVersion}-mongodb
                         docker push ${containerRegistry}/php/php-base:latest
                         docker push ${containerRegistry}/php/php-base:latest-mongodb
                     """
