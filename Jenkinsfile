@@ -80,33 +80,14 @@ pipeline {
                         docker build -t php-base:8.4${currentVersion}-mongodb -t php-base:8.4-mongodb -f dockerfile84 --target mongodb .
                         docker tag php-base:8.4${currentVersion}-mongodb ${containerRegistry}/php/php-base:8.4${currentVersion}-mongodb
                         docker tag php-base:8.4-mongodb ${containerRegistry}/php/php-base:8.4-mongodb
+
+                        docker push ${containerRegistry}/php/php-base:8.3
+                        docker push ${containerRegistry}/php/php-base:8.3-mongodb
+                        docker push ${containerRegistry}/php/php-base:8.4-mongodb
+                        docker push ${containerRegistry}/php/php-base:8.4-mongodb
+                        docker push ${containerRegistry}/php/php-base:latest
+                        docker push ${containerRegistry}/php/php-base:latest-mongodb
                     """
-                }
-                script {
-                    def buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.3", 'docker-local'
-                    buildInfo.append buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.3${currentVersion}", 'docker-local'
-                    buildInfo.append buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.3-mongodb", 'docker-local'
-                    buildInfo.append buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.3${currentVersion}-mongodb", 'docker-local'
-                    buildInfo.append buildInfoTemp
-
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.4", 'docker-local'
-                    buildInfo.append buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.4${currentVersion}", 'docker-local'
-                    buildInfo.append buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.4-mongodb", 'docker-local'
-                    buildInfo.append buildInfoTemp
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:8.4${currentVersion}-mongodb", 'docker-local'
-                    buildInfo.append buildInfoTemp
-
-                    buildInfoTemp = artifactoryDocker.push "${containerRegistry}/php/php-base:latest-mongodb", 'docker-local'
-                    buildInfo.append buildInfoTemp
-                    def buildInfoTempLatest
-                    buildInfoTempLatest = artifactoryDocker.push "${containerRegistry}/php/php-base:latest", 'docker-local'
-                    buildInfo.append buildInfoTempLatest
                 }
             }
         }
