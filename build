@@ -25,8 +25,12 @@ do
             docker build --pull -t php-base:8.3-mongodb -t php-base:latest-mongodb -f dockerfile83 --target mongodb .
             ;;
         php84 | --php84)
-            docker build --pull -t php-base:8.4 -t php-base:latest -f dockerfile84 --target base .
-            docker build --pull -t php-base:8.4-mongodb -t php-base:latest-mongodb -f dockerfile84 --target mongodb .
+            docker build --pull -t php-base:8.4 -f dockerfile84 --target base .
+            docker build --pull -t php-base:8.4-mongodb -f dockerfile84 --target mongodb .
+            ;;
+        php85 | --php85)
+            docker build --pull -t php-base:8.5 -f dockerfile85 --target base .
+            docker build --pull -t php-base:8.5-mongodb -f dockerfile85 --target mongodb .
             ;;
         *)
             echo "argument ${this} is unknown"
