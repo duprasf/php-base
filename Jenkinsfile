@@ -21,7 +21,7 @@ pipeline {
     environment {
         containerRegistryCredentials = credentials('ARTIFACTORY_PUBLISH')
         containerRegistry = 'artifactory.devops.hc-sc.gc.ca'
-        containerRegistryPath = "${containerRegistry}/devops/php-test-2"
+        containerRegistryPath = "${containerRegistry}/php"
     }
 
     stages {
@@ -81,6 +81,15 @@ pipeline {
                         docker tag php-base:8.4${currentVersion}-mongodb ${containerRegistryPath}/php-base:8.4${currentVersion}-mongodb
                         docker tag php-base:8.4-mongodb ${containerRegistryPath}/php-base:8.4-mongodb
 
+                        docker pull php:8.5-apache
+                        docker build -t php-base:8.5${currentVersion} -t php-base:8.5 -f dockerfile85 --target base .
+                        docker tag php-base:8.5${currentVersion} ${containerRegistryPath}/php-base:8.5${currentVersion}
+                        docker tag php-base:8.5 ${containerRegistryPath}/php-base:8.5
+
+                        docker build -t php-base:8.5${currentVersion}-mongodb -t php-base:8.5-mongodb -f dockerfile85 --target mongodb .
+                        docker tag php-base:8.5${currentVersion}-mongodb ${containerRegistryPath}/php-base:8.5${currentVersion}-mongodb
+                        docker tag php-base:8.5-mongodb ${containerRegistryPath}/php-base:8.5-mongodb
+
                         docker push ${containerRegistryPath}/php-base:8.3
                         docker push ${containerRegistryPath}/php-base:8.3${currentVersion}
                         docker push ${containerRegistryPath}/php-base:8.3-mongodb
@@ -89,6 +98,10 @@ pipeline {
                         docker push ${containerRegistryPath}/php-base:8.4${currentVersion}
                         docker push ${containerRegistryPath}/php-base:8.4-mongodb
                         docker push ${containerRegistryPath}/php-base:8.4${currentVersion}-mongodb
+                        docker push ${containerRegistryPath}/php-base:8.5
+                        docker push ${containerRegistryPath}/php-base:8.5${currentVersion}
+                        docker push ${containerRegistryPath}/php-base:8.5-mongodb
+                        docker push ${containerRegistryPath}/php-base:8.5${currentVersion}-mongodb
                         docker push ${containerRegistryPath}/php-base:latest
                         docker push ${containerRegistryPath}/php-base:latest-mongodb
                     """
