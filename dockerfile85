@@ -73,7 +73,6 @@ RUN set -eux; \
         zip \
         intl \
         mysqli\
-        opcache\
         gettext \
         pdo_mysql\
         pdo_sqlite
